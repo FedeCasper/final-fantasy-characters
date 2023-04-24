@@ -2,6 +2,9 @@ let url = "https://www.moogleapi.com/api/v1/characters"
 let buttonsSection = document.getElementById('buttonsContainer')
 let missingImage = "https://media.istockphoto.com/vectors/missing-image-of-a-person-placeholder-vector-id1288129985?k=6&m=1288129985&s=170667a&w=0&h=xCdaKox_lJDBu1HJy-_TSUrotisDUcsziOF13uAckwg="
 
+
+
+
 fetch(url)
 .then(response => response.json())
 .then(data => {
@@ -37,12 +40,12 @@ function createButtons (array, htmlElementId){
      } )
 }
 let cardsSection = document.getElementById('cardsContainer')
+
 function printCards(array){
      cardsSection.innerHTML = ""
      let auxiliardiv = document.createElement('div')
-     auxiliardiv.classList.add('d-flex', 'flex-wrap', 'gap-3')
+     auxiliardiv.classList.add('d-flex', 'justify-content-center', 'flex-wrap', 'gap-3', 'm-5')
      let fragment = document.createDocumentFragment()
-
      array.forEach( element => {
           let description = (element.description) == null ? "No description avaiable" : element.description || (element.description).length > 250 ? (element.description).slice(0, 250) : element.description
           // console.log(description);
