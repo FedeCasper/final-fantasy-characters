@@ -1,7 +1,7 @@
 let url = "https://www.moogleapi.com/api/v1/characters"
 let buttonsSection = document.getElementById('buttonsContainer')
 let missingImage = "https://media.istockphoto.com/vectors/missing-image-of-a-person-placeholder-vector-id1288129985?k=6&m=1288129985&s=170667a&w=0&h=xCdaKox_lJDBu1HJy-_TSUrotisDUcsziOF13uAckwg="
-
+let gameDescription = document.querySelector('h6')
 
 
 
@@ -20,6 +20,28 @@ fetch(url)
      filterByGame ( buttons , data)
 
 })
+.catch(error => console.error(error))
+
+fetch("https://www.moogleapi.com/api/v1/games")
+.then(response => response.json())
+.then(data => {
+     console.log(data);
+
+     function printDescription(){
+
+          gameDescription.innerHTML = 
+          `
+          <img class="mb-5" style="height: 220px" src="${data[0].picture}" class="card-img-top object-fit-scale" alt="...">
+          <h2>${data[0].title}</h2>
+          <p>${data[0].description}</p>
+          `
+
+     }
+     printDescription()
+
+})
+
+
 
 function filterByGame ( buttonNodeList, originalArray ){
      buttonNodeList.forEach( element => {
@@ -55,7 +77,7 @@ function printCards(array){
           <img style="height: 18rem;" src="${ !element.pictures[0] ? missingImage : element.pictures[0].url }" class="card-img-top object-fit-scale" alt="...">
           <div class="card-body">
           <h5 class="card-title">${element.name}</h5>
-          <p class="card-text">${ description.length < 250 ? description : description + ' <a href="#">ver mas</a>' }</p>
+          <p class="card-text">${ description.length < 250 ? description : description + ' <a href="#">...ver mas</a>' }</p>
           </div>
           <ul class="list-group list-group-flush">
           <li class="list-group-item">Job: ${element.job}</li>
