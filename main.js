@@ -6,78 +6,80 @@ let gameDescription = document.getElementById('gameInfo')
 
 // console.log(buttons);
 
+// GAMES's endpoint fetch --------------------------------//
 let dataGames = [];
-async function getGameData(){
+async function getGameData() {
 
-    let reponse = await fetch(gamesUrl)
-//     console.log(reponse);
+     let reponse = await fetch(gamesUrl)
+     //   console.log(reponse);
      dataGames = await reponse.json()
      console.log(dataGames);
-
+     let x = dataGames.map( (object, indice) => {
+          object.id = indice ++
+          return object
+     } )
+     console.log(x);
      return dataGames
      // .catch(error => console.error(error))
 
 }
 getGameData()
 
-// Character's endpoint fetch --------------------------------//
+// CHARACTER's endpoint fetch --------------------------------//
 fetch(charactersUrl)
-.then(response => response.json())
-.then(data => {
-     // console.log(data);
-     let arrayOrigin = [...new Set(data.map( element => element.origin))]
-     // console.log(arrayOrigin);
-     let arraysByGame = arrayOrigin.map( elementA => data.filter( elementB => elementB.origin == elementA ))
-     // console.log(arraysByGame);
-     createButtons(arrayOrigin, buttonsSection)
-     let buttons = document.querySelectorAll('button')
-     filterByGame ( buttons , data)
+     .then(response => response.json())
+     .then(data => {
+          // console.log(data);
+          let arrayOrigin = [...new Set(data.map(element => element.origin))]
+          // console.log(arrayOrigin);
+          let arraysByGame = arrayOrigin.map(elementA => data.filter(elementB => elementB.origin == elementA))
+          // console.log(arraysByGame);
+          createButtons(arrayOrigin, buttonsSection)
+          let buttons = document.querySelectorAll('button')
+          filterByGame(buttons, data, dataGames)
 
-})
-.catch(error => console.error(error))
-
-// Character's endpoint fetch --------------------------------//
-
-
-
+     })
+     .catch(error => console.error(error))
 
 
 // First fetch functions ---------------------------------------------------------------//
-function filterByGame ( buttonNodeList, originalArray ){
-     buttonNodeList.forEach( element => {
+function filterByGame(buttonNodeList, originalArray, gamesArray) {
+     buttonNodeList.forEach(element => {
           element.addEventListener('click', (e) => {
-               let arrayFilteredByOrigin = originalArray.filter( object => object.origin == e.target.value) 
+               let arrayFilteredByOrigin = originalArray.filter(object => object.origin == e.target.value)
+               let x = gamesArray.filter( object => console.log(e.target.value))
+               console.log(x);
                console.log(arrayFilteredByOrigin);
                printCards(arrayFilteredByOrigin)
-          } )
+          })
      })
 }
 
-function createButtons (array, htmlElementId){
-     array.forEach( element => {
-          htmlElementId.innerHTML += 
-          `
+function createButtons(array, htmlElementId) {
+     array.forEach(element => {
+          htmlElementId.innerHTML +=
+               `
           <button value="${element}" class="btn btn-primary btn-sm">${element}</button>
           `
-     } )
+     })
 }
 
 let cardsSection = document.getElementById('cardsContainer')
-function printCards(array){
+function printCards(array) {
      cardsSection.innerHTML = ""
      let auxiliardiv = document.createElement('div')
      auxiliardiv.classList.add('d-flex', 'justify-content-center', 'flex-wrap', 'gap-3', 'm-5')
      let fragment = document.createDocumentFragment()
-     array.forEach( element => {
+     array.forEach(element => {
           let description = (element.description) == null ? "No description avaiable" : element.description || (element.description).length > 250 ? (element.description).slice(0, 250) : element.description
           // console.log(description);
-          auxiliardiv.innerHTML += 
-          `
+          auxiliardiv.innerHTML +=
+               `
           <div class="card" style="width: 22rem;">
-          <img style="height: 18rem;" src="${ !element.pictures[0] ? missingImage : element.pictures[0].url }" class="card-img-top object-fit-scale" alt="...">
+          <img style="height: 18rem;" src="${!element.pictures[0] ? missingImage : element.pictures[0].url}" class="card-img-top object-fit-scale" alt="...">
           <div class="card-body">
           <h5 class="card-title">${element.name}</h5>
-          <p class="card-text">${ description.length < 250 ? description : description + ' <a href="#">...ver mas</a>' }</p>
+          <p class="card-text">${description.length < 250 ? description : description + ' <a href="#">...ver mas</a>'}</p>
           </div>
           <ul class="list-group list-group-flush">
           <li class="list-group-item">Job: ${element.job}</li>
