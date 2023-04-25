@@ -1,47 +1,35 @@
-let url = "https://www.moogleapi.com/api/v1/characters"
+let charactersUrl = "https://www.moogleapi.com/api/v1/characters";
+let gamesUrl = "https://www.moogleapi.com/api/v1/games";
 let buttonsSection = document.getElementById('buttonsContainer')
 let missingImage = "https://media.istockphoto.com/vectors/missing-image-of-a-person-placeholder-vector-id1288129985?k=6&m=1288129985&s=170667a&w=0&h=xCdaKox_lJDBu1HJy-_TSUrotisDUcsziOF13uAckwg="
-let gameDescription = document.querySelector('h6')
+let gameDescription = document.getElementById('gameInfo')
 
+// Character's endpoint fetch --------------------------------//
+fetch(charactersUrl)
+.then(response => response.json())
+.then(data => {
+     // console.log(data);
+     let arrayOrigin = [...new Set(data.map( element => element.origin))]
+     // console.log(arrayOrigin);
+     let arraysByGame = arrayOrigin.map( elementA => data.filter( elementB => elementB.origin == elementA ))
+     // console.log(arraysByGame);
+     createButtons(arrayOrigin, buttonsSection)
+     let buttons = document.querySelectorAll('button')
+     filterByGame ( buttons , data)
+})
+.catch(error => console.error(error))
 
-
-fetch(url)
+// Character's endpoint fetch --------------------------------//
+fetch(gamesUrl)
 .then(response => response.json())
 .then(data => {
      console.log(data);
-     let arrayOrigin = [...new Set(data.map( element => element.origin))]
-     console.log(arrayOrigin);
-     let arraysByGame = arrayOrigin.map( elementA => data.filter( elementB => elementB.origin == elementA ))
-     console.log(arraysByGame);
-
-     createButtons(arrayOrigin, buttonsSection)
-
-     let buttons = document.querySelectorAll('button')
-     filterByGame ( buttons , data)
+     printDescription(data)
 
 })
 .catch(error => console.error(error))
 
-fetch("https://www.moogleapi.com/api/v1/games")
-.then(response => response.json())
-.then(data => {
-     console.log(data);
-
-     function printDescription(){
-
-          gameDescription.innerHTML = 
-          `
-          <img class="mb-5" style="height: 220px" src="${data[0].picture}" class="card-img-top object-fit-scale" alt="...">
-          <h2>${data[0].title}</h2>
-          <p>${data[0].description}</p>
-          `
-
-     }
-     printDescription()
-
-})
-
-
+// First fetch functions ---------------------------------------------------------------
 
 function filterByGame ( buttonNodeList, originalArray ){
      buttonNodeList.forEach( element => {
@@ -57,12 +45,12 @@ function createButtons (array, htmlElementId){
      array.forEach( element => {
           htmlElementId.innerHTML += 
           `
-          <button type="button" value="${element}" class="btn btn-primary btn-sm">${element}</button>
+          <button value="${element}" class="btn btn-primary btn-sm">${element}</button>
           `
      } )
 }
-let cardsSection = document.getElementById('cardsContainer')
 
+let cardsSection = document.getElementById('cardsContainer')
 function printCards(array){
      cardsSection.innerHTML = ""
      let auxiliardiv = document.createElement('div')
@@ -94,4 +82,18 @@ function printCards(array){
      console.log([fragment]);
      fragment.appendChild(auxiliardiv)
      cardsSection.appendChild(fragment)
+}
+
+// Second fetch functions ---------------------------------------------------------------
+function printDescription(array){
+     let auxDiv = document.createElement('div')
+     array.forEach(element => {
+          auxDiv.innerHTML = 
+          `
+          <img class="mb-5" style="height: 220px" src="${element.picture? element.picture : '<p>Image not found</p>'}" class="card-img-top object-fit-scale" alt="...">
+          <h2>${element.title}</h2>
+          <p>${element.description}</p>
+          `
+     })
+     gameDescription.appendChild(auxDiv)
 }

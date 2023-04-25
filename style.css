@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Amethysta&display=swap');
 
-html {
+button:hover {
      cursor: url(./assets/ff_cursor.cur), auto;
 }
 body{
