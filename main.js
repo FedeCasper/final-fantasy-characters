@@ -14,11 +14,11 @@ async function getGameData() {
      //   console.log(reponse);
      dataGames = await reponse.json()
      console.log(dataGames);
-     let x = dataGames.map( (object, indice) => {
-          object.id = indice ++
+     let dataGamesWithId = dataGames.map( (object, indice) => {
+          object.id = (indice ++) +1
           return object
      } )
-     console.log(x);
+     console.log(dataGamesWithId);
      return dataGames
      // .catch(error => console.error(error))
 
@@ -31,7 +31,12 @@ fetch(charactersUrl)
      .then(data => {
           // console.log(data);
           let arrayOrigin = [...new Set(data.map(element => element.origin))]
-          // console.log(arrayOrigin);
+          let ffBe = arrayOrigin.splice(1,1)
+          console.log(ffBe[0]);
+          console.log(arrayOrigin);
+          arrayOrigin.push("Final Fantasy BE")
+          console.log(arrayOrigin);
+
           let arraysByGame = arrayOrigin.map(elementA => data.filter(elementB => elementB.origin == elementA))
           // console.log(arraysByGame);
           createButtons(arrayOrigin, buttonsSection)
@@ -47,21 +52,42 @@ function filterByGame(buttonNodeList, originalArray, gamesArray) {
      buttonNodeList.forEach(element => {
           element.addEventListener('click', (e) => {
                let arrayFilteredByOrigin = originalArray.filter(object => object.origin == e.target.value)
-               let x = gamesArray.filter( object => console.log(e.target.value))
-               console.log(x);
+               let gameSagaOfCharacter = gamesArray.filter( object => object.id == e.target.id )
+               console.log(gameSagaOfCharacter);
                console.log(arrayFilteredByOrigin);
                printCards(arrayFilteredByOrigin)
+               createGameSection (gameSagaOfCharacter, gameDescription)
           })
      })
 }
 
 function createButtons(array, htmlElementId) {
-     array.forEach(element => {
+     array.forEach((element, indice) => {
           htmlElementId.innerHTML +=
                `
-          <button value="${element}" class="btn btn-primary btn-sm">${element}</button>
+          <button value="${element}" id="${(indice++) +1}" class="btn btn-primary btn-sm">${element}</button>
           `
      })
+}
+
+function createGameSection (array, htmlElementId){
+     console.log(array);
+     htmlElementId.innerHTML = "";
+     let auxiliardiv = document.createElement('div')
+     array.forEach( element => {
+          auxiliardiv.innerHTML = 
+          `
+          <div class="card mb-3">
+               <img src="..." class="card-img-top" alt="...">
+               <div class="card-body">
+                    <h5 class="card-title">${element.title}</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+               </div>
+          </div>
+          `
+     })
+     htmlElementId.appendChild(auxiliardiv)
 }
 
 let cardsSection = document.getElementById('cardsContainer')
