@@ -4,6 +4,22 @@ let buttonsSection = document.getElementById('buttonsContainer')
 let missingImage = "https://media.istockphoto.com/vectors/missing-image-of-a-person-placeholder-vector-id1288129985?k=6&m=1288129985&s=170667a&w=0&h=xCdaKox_lJDBu1HJy-_TSUrotisDUcsziOF13uAckwg="
 let gameDescription = document.getElementById('gameInfo')
 
+// console.log(buttons);
+
+let dataGames = [];
+async function getGameData(){
+
+    let reponse = await fetch(gamesUrl)
+//     console.log(reponse);
+     dataGames = await reponse.json()
+     console.log(dataGames);
+
+     return dataGames
+     // .catch(error => console.error(error))
+
+}
+getGameData()
+
 // Character's endpoint fetch --------------------------------//
 fetch(charactersUrl)
 .then(response => response.json())
@@ -16,21 +32,17 @@ fetch(charactersUrl)
      createButtons(arrayOrigin, buttonsSection)
      let buttons = document.querySelectorAll('button')
      filterByGame ( buttons , data)
+
 })
 .catch(error => console.error(error))
 
 // Character's endpoint fetch --------------------------------//
-fetch(gamesUrl)
-.then(response => response.json())
-.then(data => {
-     console.log(data);
-     printDescription(data)
 
-})
-.catch(error => console.error(error))
 
-// First fetch functions ---------------------------------------------------------------
 
+
+
+// First fetch functions ---------------------------------------------------------------//
 function filterByGame ( buttonNodeList, originalArray ){
      buttonNodeList.forEach( element => {
           element.addEventListener('click', (e) => {
@@ -82,18 +94,4 @@ function printCards(array){
      console.log([fragment]);
      fragment.appendChild(auxiliardiv)
      cardsSection.appendChild(fragment)
-}
-
-// Second fetch functions ---------------------------------------------------------------
-function printDescription(array){
-     let auxDiv = document.createElement('div')
-     array.forEach(element => {
-          auxDiv.innerHTML = 
-          `
-          <img class="mb-5" style="height: 220px" src="${element.picture? element.picture : '<p>Image not found</p>'}" class="card-img-top object-fit-scale" alt="...">
-          <h2>${element.title}</h2>
-          <p>${element.description}</p>
-          `
-     })
-     gameDescription.appendChild(auxDiv)
 }
