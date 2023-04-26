@@ -31,11 +31,7 @@ fetch(charactersUrl)
      .then(data => {
           // console.log(data);
           let arrayOrigin = [...new Set(data.map(element => element.origin))]
-          let ffBe = arrayOrigin.splice(1,1)
-          console.log(ffBe[0]);
-          console.log(arrayOrigin);
-          arrayOrigin.push("Final Fantasy BE")
-          console.log(arrayOrigin);
+          ordenaArray (arrayOrigin)
 
           let arraysByGame = arrayOrigin.map(elementA => data.filter(elementB => elementB.origin == elementA))
           // console.log(arraysByGame);
@@ -45,6 +41,18 @@ fetch(charactersUrl)
 
      })
      .catch(error => console.error(error))
+
+function ordenaArray (array){
+     let ffBe = array.splice(1,1)
+     let ffIX = array.splice(4,1)
+     console.log(ffIX[0]);
+     console.log(ffBe[0]);
+     console.log(array);
+     array.push("Final Fantasy BE")
+     array.splice(8,0,ffIX)
+     console.log(array);
+     return array
+}
 
 
 // First fetch functions ---------------------------------------------------------------//
@@ -74,14 +82,15 @@ function createGameSection (array, htmlElementId){
      console.log(array);
      htmlElementId.innerHTML = "";
      let auxiliardiv = document.createElement('div')
+     auxiliardiv.classList.add('d-flex', 'justify-content-center')
      array.forEach( element => {
           auxiliardiv.innerHTML = 
           `
-          <div class="card mb-3">
-               <img src="..." class="card-img-top" alt="...">
+          <div class="card mb-3 w-75">
+               <img class="w-50 d-flex align-self-center m-5" src="${element.picture}" class="card-img-top" alt="...">
                <div class="card-body">
                     <h5 class="card-title">${element.title}</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text">${element.description}</p>
                     <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
                </div>
           </div>
