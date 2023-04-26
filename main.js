@@ -91,7 +91,8 @@ function createGameSection (array, htmlElementId){
                <div class="card-body">
                     <h5 class="card-title">${element.title}</h5>
                     <p class="card-text">${element.description}</p>
-                    <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                    <p class="card-text"><small class="text-body-secondary">Plataform: ${element.platform}</small></p>
+                    <p class="card-text"><small class="text-body-secondary">Release date: ${element.releaseDate}</small></p>
                </div>
           </div>
           `
